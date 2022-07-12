@@ -619,6 +619,8 @@ impl<'config, 'precompiles, S: StackState<'config>, P: PrecompileSet>
 			gas - gas / 64
 		}
 
+		self.state.inc_nonce(caller);
+
 		let address = self.create_address(scheme);
 
 		self.state.metadata_mut().access_address(caller);
@@ -660,8 +662,6 @@ impl<'config, 'precompiles, S: StackState<'config>, P: PrecompileSet>
 
 		let gas_limit = min(after_gas, target_gas);
 		try_or_fail!(self.state.metadata_mut().gasometer.record_cost(gas_limit));
-
-		self.state.inc_nonce(caller);
 
 		self.enter_substate(gas_limit, false);
 
